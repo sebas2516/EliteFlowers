@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">    
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- <script src="https://Kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script> -->
+            <link rel="stylesheet" href="CSS/vehiculos.css">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <title> Vehiculos </title>
+</head>
+
+<body id="body" class="body" onload="CallWebAPI()">
+
+    <!-- Menú -->
+    <div class="container">
+
+        <!-- Div Logo -->
+        <div class="collapse">
+            <a href="index.html"><img src="img/coltrack-horizontal.png" class="logo"></a>
+        </div >
+
+        <!--div menu-->
+        <nav class="navegacion">
+            <ul class="menu">
+                <li><a href="index.html"> Inicio </a></li>
+                <li><a href="vehiculos.html"> Vehiculos </a></li>
+                <li><a href="iframe.html"> Reportes </a></li>
+            </ul>
+        </nav>
+
+        <!-- inicio sesion enlace -->
+        <ul class="menu">
+            <li><a href="index.html"> Logout </a></li>
+        </ul>
+    </div>
+
+    <script type="text/javascript" >
+        
+        var userName = "servWebElite";
+        var passWord = "$s3rvW3bEl1t3%";
+        
+        function authenticateUser(user, password){
+            var auth = user + ":" + password;    
+            var hash = btoa(auth); 
+            return "Basic " + hash;
+        };
+        
+        // -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        // Btn = document.getElementById('Activo').addEventListener('click', e => {
+	    // if(e.target.checked) {
+		// alert("Checkbox checked!");
+
+        // function prueba(){
+        //     // if($('#Activo').checked ){
+        //     // alert("SRN020")}
+        //     alert("En ruta")
+            
+        //     // if("+input[id = "Activo"]" .checked){
+
+        //     for (let index = 0; index < salida.length; index++) {
+        //         let check = (""+salida[index].NOMBRE+"")
+                
+                
+        //         // if(""+$("input[name = "+salida[index].NOMBRE+"]")+"" == "JUK232"){                        // if(check == "SRN020" || check== "JUK232"){
+        //             document.cookie = ""+(check)+" = ACTIVO; expires =  31 Dec 2022  11:59:59 UTC; SameSite = None; Secure ";
+        //             // alert("ALERTA")
+        //         };
+        //     };
+        // ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+            // document.cookie = ""+(check)+" = activo; expires = Thu, 20 Nov 2022 11:59:59 UTC; SameSite = None; Secure";
+            // document.cookie = ""+$("input[name = "+salida[index].NOMBRE+"]")+" = activo; expires = Thu, 20 Nov 2022 11:59:59 UTC; SameSite = None; Secure";
+            // alert("El vehiculo de placa " +salida[0].NOMBRE + " ha iniciado ruta")
+        // };
+        
+        // }
+        //    if($('#Activo') == "SRN020" ){
+        //         alert("SRN020")
+        //    }
+        // let Check = ($('#Activo')[0].checked)
+        // console.log("Check");
+
+        // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        // function Activar(){
+        //     for (let index = 0; index < salida.length; index++) {
+        //         document.cookie = "nombre = "+salida[index].NOMBRE+"; expires = Thu, 20 Nov 2022 11:59:59 UTC; SameSite = None; Secure";
+        //         // document.cookie = "+$('+input[name="+salida[index].NOMBRE+"]')+ = Activo; expires = Thu, 20 Nov 2022 11:59:59 UTC; SameSite = None; Secure";
+        //         // alert("El vehiculo de placa " +salida[index].NOMBRE + " ha iniciado ruta")
+        //     };
+        // };
+
+        function Desactivar(){
+            for (let index = 0; index < salida.length; index++) {
+                document.cookie = ""+salida[25].NOMBRE+" = Desactivo; expires= 20 Nov 2022 11:59:59 UTC;  SameSite = None; Secure";
+                // alert("el vehiculo ha finalizado ruta");
+            };
+        };
+
+        // Todos los datos
+        
+        function CallWebAPI() {    
+            var request = new XMLHttpRequest();
+            var autenticate = authenticateUser(userName, passWord);
+            
+                request.open("get", "https://gps.coltrack.com/gps/api.jsp", false);	
+                request.setRequestHeader("Authorization", authenticateUser(userName, passWord));  	
+                request.send();   
+                console.log("Loaded data");    
+                respuesta=JSON.parse(request.response);       
+
+            salida = respuesta.message.data;   
+            $("#Tabla").append('<tr><th>PLACA</th><th>TEMPERATURA</th><th>HORA</th><th>LUGAR</th><th>UBICACION</th><th>CIUDAD</th><th>EVENTO</th><th>Activo</th><th> Desactivo</th></tr>');
+            $("#Tabla1").append('<tr><th>PLACA</th><th>TEMPERATURA</th><th>HORA</th><th>LUGAR</th><th>DIRECCION</th><th>CIUDAD</th><th>EVENTO</th><th>Activo | Desactivo</th></tr>');
+            $("#Tabla2").append('<tr><th>PLACA</th><th>TEMPERATURA</th><th>HORA</th><th>LUGAR</th><th>DIRECCION</th><th>CIUDAD</th><th>EVENTO</th><th>Activo | Desactivo</th></tr>');
+
+            for (let index = 0; index < salida.length; index++) {
+                $("#Tabla").append("<tr name = "+salida[index].NOMBRE+"><td>"
+                    +salida[index].PLACA+"</td><td>"
+                    +salida[index].TEMPERATURA+"</td><td>"
+                    +salida[index].TIEMPO+"</td><td>"
+                    +salida[index].LUGAR+"</td><td>"
+                    +salida[index].UBICACION+"<a class= fcc-btn href=  https://maps.google.com/?q="
+                    +salida[index].LATITUD+","+salida[index].LONGITUD+"> <i class='bi bi-geo-alt-fill'></i>"+"</a></td><td>"
+                    +salida[index].CIUDAD+"</td><td>"
+                    +salida[index].EVENTO+"</td><td>"
+                    +"&nbsp; &nbsp; <input type ='radio' id ='Activo'  onclick ='prueba()'name = "+salida[index].NOMBRE+" value ='Activar'> &nbsp; &nbsp;"+"</td><td>"
+                    +"&nbsp; &nbsp; &nbsp; <input type ='radio' id ='Desactivo' onclick = 'Desactivar()' name = "+salida[index].NOMBRE+" value ='Desactivar'> &nbsp; &nbsp;"
+                +"</td></tr>");   
+
+                +$("#Tabla1").empty("<tr id = "+salida[index].NOMBRE+"><td>"
+                    +salida[index].PLACA+"</td><td>"
+                    +salida[index].TEMPERATURA+"</td><td>"
+                    +salida[index].TIEMPO+"</td><td>"
+                    +salida[index].LUGAR+"</td><td>"
+                    +salida[index].UBICACION+"<a class= fcc-btn href=  https://maps.google.com/?q="                    
+                    +salida[index].LATITUD+","+salida[index].LONGITUD+"> <i class='bi bi-geo-alt-fill'></i>"+"</a></td><td>"
+                    +salida[index].CIUDAD+"</td><td>"
+                    +salida[index].EVENTO+"</td><td class= 'boton'>"
+                    +"&nbsp; &nbsp; <input type ='radio' id ='Activo' onclick = 'prueba()' name = "+salida[index].NOMBRE+" value ='Activar'> &nbsp; &nbsp;"+"</td><td>"
+                    +"&nbsp; &nbsp; &nbsp; <input type ='radio' id ='Desactivo' onclick = 'Desactivar()' name = "+salida[index].NOMBRE+" value ='Desactivar'> &nbsp; &nbsp;"
+                +"</td></tr>");       
+
+                +$("#Tabla2").empty("<tr id = "+salida[index].NOMBRE+"><td>"
+                    +salida[index].PLACA+"</td><td>"
+                    +salida[index].TEMPERATURA+"</td><td>"
+                    +salida[index].TIEMPO+"</td><td>"
+                    +salida[index].LUGAR+"</td><td>"
+                    +salida[index].UBICACION+"<a class= fcc-btn href=  https://maps.google.com/?q="
+                    +salida[index].LATITUD+","+salida[index].LONGITUD+"> <i class='bi bi-geo-alt-fill'></i>"+"</a></td><td>"
+                    +salida[index].CIUDAD+"</td><td>"
+                    +salida[index].EVENTO+"</td><td>"
+                    +"&nbsp; &nbsp; <input type ='radio' id ='Activo' onclick = 'prueba()' name = "+salida[index].NOMBRE+" value ='Activar'> &nbsp; &nbsp;"+"</td><td>"
+                    +"&nbsp; &nbsp; &nbsp; <input type ='radio' id ='Desactivo' onclick = 'Desactivar()' name = "+salida[index].NOMBRE+" value ='Desactivar'> &nbsp; &nbsp;"
+                +"</td></tr>");
+            };
+        }; 
+
+        // Filtro activos
+
+        function Activos(){
+            for (let index = 0; index < salida.length; index++) {
+                if (salida[index].EVENTO == "TDR Encendido" || salida[index].EVENTO == "Encendido" || salida[index].EVENTO == "TDR Encendido-No GSM" || salida[index].EVENTO == "GPS Adquirido" || salida[index].EVENTO == "Temperatura Alta > 8º"){   
+                    $("#Tabla1").append("<tr id = "+salida[index].NOMBRE+"><td>"
+                        +salida[index].PLACA+"</td><td>"
+                        +salida[index].TEMPERATURA+"</td><td>"
+                        +salida[index].TIEMPO+"</td><td>"
+                        +salida[index].LUGAR+"</td><td>"
+                        +salida[index].UBICACION+"<a class= fcc-btn href=  https://maps.google.com/?q="
+                        +salida[index].LATITUD+","+salida[index].LONGITUD+"><i class='bi bi-geo-alt-fill'></i>"+"</a></td><td>"
+                        +salida[index].CIUDAD+"</td><td>"
+                        +salida[index].EVENTO+"</td><td >"
+                        +"&nbsp; &nbsp; <input type ='radio' id ='Activo' onclick = 'prueba()' name = "+salida[index].NOMBRE+" value ='Activar'> &nbsp; &nbsp;"+"</td><td>"
+                        +"&nbsp; &nbsp; &nbsp; <input type ='radio' id ='Desactivo' onclick = 'Desactivar()' name = "+salida[index].NOMBRE+" value ='Desactivar'> &nbsp; &nbsp;"
+                    +"</td></tr>");       
+                        
+                    +$("#Tabla").empty("<tr id = "+salida[index].NOMBRE+"><td>"
+                        +salida[index].PLACA+"</td><td>"
+                        +salida[index].TEMPERATURA+"</td><td>"
+                        +salida[index].TIEMPO+"</td><td>"
+                        +salida[index].LUGAR+"</td><td>"
+                        +salida[index].UBICACION+"<a class= fcc-btn href=  https://maps.google.com/?q="
+                        +salida[index].LATITUD+","+salida[index].LONGITUD+"><i class='bi bi-geo-alt-fill'></i>"+"</a></td><td>"
+                        +salida[index].CIUDAD+"</td><td>"
+                        +salida[index].EVENTO+"</td><td>"
+                        +"&nbsp; &nbsp; <input type ='radio' id ='Activo' onclick = 'prueba()' name = "+salida[index].NOMBRE+" value ='Activar'> &nbsp; &nbsp;"+"</td><td>"
+                        +"&nbsp; &nbsp; &nbsp; <input type ='radio' id ='Desactivo' onclick = 'Desactivar()' name = "+salida[index].NOMBRE+" value ='Desactivar'> &nbsp; &nbsp;"
+                    +"</td></tr>");       
+
+                    +$("#Tabla2").empty("<tr id = "+salida[index].NOMBRE+"><td>"
+                        +salida[index].PLACA+"</td><td>"
+                        +salida[index].TEMPERATURA+"</td><td>"
+                        +salida[index].TIEMPO+"</td><td>"
+                        +salida[index].LUGAR+"</td><td>"
+                        +salida[index].UBICACION+"<a class= fcc-btn href=  https://maps.google.com/?q="
+                        +salida[index].LATITUD+","+salida[index].LONGITUD+"> <i class='bi bi-geo-alt-fill'></i>"+"</a></td><td>"
+                        +salida[index].CIUDAD+"</td><td>"
+                        +salida[index].EVENTO+"</td><td>"
+                        +"&nbsp; &nbsp; <input type ='radio' id ='Activo' onclick = 'prueba()' name = "+salida[index].NOMBRE+" value ='Activar'> &nbsp; &nbsp;"+"</td><td>"
+                        +"&nbsp; &nbsp; &nbsp; <input type ='radio' id ='Desactivo' onclick = 'Desactivar()' name = "+salida[index].NOMBRE+" value ='Desactivar'> &nbsp; &nbsp;"
+                    +"</td></tr>");       
+                };
+            };
+        };
+
+        // Filtro inactivos
+
+        function Inactivos(){
+            for (let index = 0; index < salida.length; index++) {
+                if (salida[index].EVENTO == "TDR Apagado" || salida[index].EVENTO == "Apagado" || salida[index].EVENTO == "Log Out" || salida[index].EVENTO == "Time Out Identificación" || salida[index].EVENTO == "Hibernación"){
+                    $("#Tabla2").append("<tr id = "+salida[index].NOMBRE+"><td>"
+                        +salida[index].PLACA+"</td><td>"
+                        +salida[index].TEMPERATURA+"</td><td>"
+                        +salida[index].TIEMPO+"</td><td>"
+                        +salida[index].LUGAR+"</td><td>"
+                        +salida[index].UBICACION+"<a class= fcc-btn href=  https://maps.google.com/?q="
+                        +salida[index].LATITUD+","+salida[index].LONGITUD+"><i class='bi bi-geo-alt-fill'></i>"+"</a></td><td>"
+                        +salida[index].CIUDAD+"</td><td>"
+                        +salida[index].EVENTO+"</td><td>"
+                        +"&nbsp; &nbsp; <input type ='radio' id ='Activo' onclick = 'prueba()' name = "+salida[index].NOMBRE+" value ='Activar'> &nbsp; &nbsp;"+"</td><td>"
+                        +"<input type ='radio' onclick ='Desactivar()' name = "+salida[index].NOMBRE+" value ='desactivo' onclick='desactivo'>"
+                    +"</td></tr>");    
+
+                    +$("#Tabla1").empty("<tr id = "+salida[index].NOMBRE+"><td>"
+                        +salida[index].PLACA+"</td><td>"
+                        +salida[index].TEMPERATURA+"</td><td>"
+                        +salida[index].TIEMPO+"</td><td>"
+                        +salida[index].LUGAR+"</td><td>"
+                        +salida[index].UBICACION+"<a class= fcc-btn href=  https://maps.google.com/?q="
+                        +salida[index].LATITUD+","+salida[index].LONGITUD+"><i class='bi bi-geo-alt-fill'></i>"+"</a></td><td>"
+                        +salida[index].CIUDAD+"</td><td>"
+                        +salida[index].EVENTO+"</td><td>"
+                        +"&nbsp; &nbsp; <input type ='radio' id ='Activo' onclick = 'prueba()' name = "+salida[index].NOMBRE+" value ='Activar'> &nbsp; &nbsp;"+"</td><td>"
+                        +"<input type ='radio' onclick ='Desactivar()' name = "+salida[index].NOMBRE+" value ='desactivo' onclick='desactivo'>"
+                    +"</td></tr>");     
+
+                    +$("#Tabla").empty("<tr><td id = "+salida[index].NOMBRE+">"
+                        +salida[index].PLACA+"</td><td>"
+                        +salida[index].TEMPERATURA+"</td><td>"
+                        +salida[index].TIEMPO+"</td><td>"
+                        +salida[index].LUGAR+"</td><td>"
+                        +salida[index].UBICACION+"<a class= fcc-btn href=  https://maps.google.com/?q="
+                        +salida[index].LATITUD+","+salida[index].LONGITUD+"><i class='bi bi-geo-alt-fill'></i>"+"</a></td><td>"
+                        +salida[index].CIUDAD+"</td><td>"
+                        +salida[index].EVENTO+"</td><td>"
+                        +"&nbsp; &nbsp; <input type ='radio' id ='Activo' onclick = 'prueba()' name = "+salida[index].NOMBRE+" value ='Activar'> &nbsp; &nbsp;"+"</td><td>"
+                        +"<input type ='radio' onclick ='Desactivar()' name = "+salida[index].NOMBRE+" value ='desactivo' onclick='desactivo'>"
+                    +"</td></tr>");
+                }; 
+            };
+        };
+
+        // -------------------------------------------------------------------------
+            // $(document).ready(function () {
+            //     //using jQuery code
+            //     $('#Activo').on('change', function (e) {
+            //         if (e.currentTarget.checked) {
+            //             alert("checked")
+            //         } else {
+            //             alert("unchecked")
+            //         }
+            //     })
+            // })
+        // -------------------------------------------------------------------
+        
+            // function hola(){
+            // const Btn = document.getElementById('Activo');
+        
+            // Btn.addEventListener('click', e =>{
+            //     alert("activo")
+            // });
+            // }
+
+        // ---------------------------------------------------------------------------------------------------------------------------------
+            // function check() {
+            //     if (document.getElementById('Activo').checked) {
+            //         document.cookie = ""+("check")+" = ACTIVO; expires =  31 Dec 2022  11:59:59 UTC; SameSite = None; Secure ";
+            //     } else {
+            //         alert("checked");
+            //     }
+            // }
+        // -----------------------------------------
+        
+        // ---------------------------------
+
+        function prueba(){
+            // if($('#Activo').checked ){
+            // alert("SRN020")}
+            alert("En ruta")
+            
+            // if("+input[id = "Activo"]" .checked){
+
+            for (let index = 0; index < salida.length; index++) {
+                // let check = (""+salida[index].NOMBRE+"")
+                let cookie = document.cookie = ""+$("input[name = "+salida[index].NOMBRE+"]")+" = ACTIVO; expires =  31 Dec 2022  11:59:59 UTC; SameSite = None; Secure ";
+
+                // if(""+$("input[name = "+salida[index].NOMBRE+"]")+"" == "JUK232"){                        // if(check == "SRN020" || check== "JUK232"){
+                // document.cookie = ""+(check)+" = ACTIVO; expires =  31 Dec 2022  11:59:59 UTC; SameSite = None; Secure ";
+                cookie.replace('ACTIVO', 'value')
+                // alert("ALERTA")
+            };
+        };
+
+    </script>
+
+    <br>
+
+    <section class="separador">
+        <p> 🚚 Datos por vehiculo 🚚 </p>
+    </section>
+
+    <!-- Filtro de datos -->
+    <section class="filtro">
+        <ul id="filtro">
+            <li><input type="checkbox" name="list" id="nivel2-1"><label for="nivel2-1"> Filtrar </label>
+                <ul class="interior">
+                    <br> <br>
+                    <li><a href="#" onclick="javascript: CallWebAPI();"> Todos </a></li>
+                    &nbsp; &nbsp; 
+
+                    <li><a href="#" onclick="javascript: Activos();"> Activos </a></li>
+                    &nbsp; &nbsp;
+
+                    <li><a href="#" onclick="javascript: Inactivos();"> Inactivos </a></li>
+                </ul>
+            </li>
+        </ul>
+    </section>
+
+    <!-- DATOS -->
+    <section class="datos">
+        <div>
+            <table id="Tabla"></table>
+            <table id="Tabla1"></table>
+            <table id="Tabla2"></table>
+        </div>
+    </section>
+
+    <!-- Pie de pagina -->
+    <footer class="pie_de_pagina">
+        <div class="grup-dos">
+            <small>&copy; 2022 © Copyright Coltrack SAS. Todos los derechos reservados.</small>
+        </div>
+    </footer>
+</body>
+</html>
